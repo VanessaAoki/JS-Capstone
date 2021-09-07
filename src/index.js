@@ -2,28 +2,27 @@ import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
-import logo from './imgs/logo.png'
+import logo from './imgs/logo.png';
 import './style.css';
 
-const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
-const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
-const involvementAppId = "Wj01840XphoYLqWu02p9"
+const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
+const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
+const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const cardWrapper = document.querySelector('.card-wrapper');
 const logoContainer = document.querySelector('.logo');
 
 let shows = [];
 
 const headerlogo = () => {
-  const myLogo = new Image ();
+  const myLogo = new Image();
   myLogo.src = logo;
-  myLogo.classList.add("logo-image");
+  myLogo.classList.add('logo-image');
   logoContainer.appendChild(myLogo);
-}
+};
 
 const displayShowsOnDOM = () => {
-  if (!shows.length)
-    return cardWrapper.innerHTML = `<P>There are no movie shows to display`;
-  
+  if (!shows.length) cardWrapper.innerHTML = '<P>There are no movie shows to display';
+
   shows.forEach((show) => {
     const cardTemplate = `
           <div class="card">
@@ -42,11 +41,10 @@ const displayShowsOnDOM = () => {
           </div>`;
     cardWrapper.innerHTML += cardTemplate;
   });
-}
+};
 
 const fetchShows = async () => {
   try {
-
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
     shows = data;
@@ -55,30 +53,29 @@ const fetchShows = async () => {
   } catch (ex) {
     console.log('Error from server', ex);
   }
-}
+};
 
 fetchShows();
 
-
 // Event Listeners
-document.addEventListener("click", async(event) => {
-  const id = event.target.id;
+document.addEventListener('click', async (event) => {
+  const { id } = event.target;
   const likesEndPoint = `/apps/${involvementAppId}/likes/`;
-  const data = { item_id: id }
-  console.log(involvementAPIUrl + likesEndPoint)
-  console.log(JSON.stringify(data))
-  if (id && id.includes("show")) {
+  const data = { item_id: id };
+  console.log(involvementAPIUrl + likesEndPoint);
+  console.log(JSON.stringify(data));
+  if (id && id.includes('show')) {
     const response = await fetch(involvementAPIUrl + likesEndPoint, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-    console.log(response)
+    console.log(response);
   }
-})
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   headerlogo();
-})
+});
