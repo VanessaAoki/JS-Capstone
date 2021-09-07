@@ -5,9 +5,12 @@
 // import '@fortawesome/fontawesome-free/js/brands';
 // import './style.css';
 
-const url = "https://api.tvmaze.com/search/shows?q=boys"
+
+const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
+const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
 let shows = [];
-const cardWrapper = document.querySelector('#card-wrapper');
+const involvementAppId = "Wj01840XphoYLqWu02p9"
+const cardWrapper = document.querySelector('.card-wrapper');
 
 const displayShowsOnDOM = () => {
   if (!shows.length)
@@ -23,7 +26,7 @@ const displayShowsOnDOM = () => {
             />
             <div class="card__body">
               <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-              <span class="card__icon">31 🤍</span>
+              <span class="card__icon">31 <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
             </div>
             <div class="card__footer">
               <button class="card__button">Comment</button>
@@ -37,7 +40,7 @@ const displayShowsOnDOM = () => {
 const fetchShows = async () => {
   try {
 
-    const response = await fetch(url);
+    const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
     shows = data;
     displayShowsOnDOM();
@@ -48,5 +51,24 @@ const fetchShows = async () => {
 }
 
 fetchShows();
+
+
+document.addEventListener("click", async(event) => {
+  const id = event.target.id;
+  const likesEndPoint = `/apps/${involvementAppId}/likes/`;
+  const data = { item_id: id }
+  console.log(involvementAPIUrl + likesEndPoint)
+  console.log(JSON.stringify(data))
+  if (id && id.includes("show")) {
+    const response = await fetch(involvementAPIUrl + likesEndPoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    console.log(response)
+  }
+})
 
 

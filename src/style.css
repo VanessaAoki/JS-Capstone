@@ -27,7 +27,7 @@ header{
   margin: 0 auto;
 }
 
-#card-wrapper{
+.card-wrapper{
   display: flex;
   flex-wrap: wrap;
 }
@@ -77,7 +77,10 @@ header{
   color:#fff;
   font-size: 17px;
   font-weight: 300;
-  border-top: 1px solid #fff;
+  border-top: 1px solid #FFDB15;
+  cursor: pointer;
+}
+.likes-icon{
   cursor: pointer;
 }
 
