@@ -1,30 +1,58 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@100;400;700&display=swap');
 
+:root {
+  --black: #020301;
+  --grey: #292929;
+  --white: #f3f5f9;
+  --yellow: #ffdb15;
+  /* font-family: 'Poppins', sans-serif; */
+}
+
 *,*::after,*::before {
+  font-family: 'PT Serif', serif;
   border: 0;
   padding: 0;
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  font-family: 'PT Serif', serif;
   box-sizing: border-box;
 }
 
 body{
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: url('./imgs/background.svg');
   font-size: 16px;
   line-height: 1.6;
-  background-color: #020301;
-color: #fff;
+  color: #fff;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 header{
-  margin-bottom: 10px;
+  padding-right: 100px;
+  height: 50px;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--yellow);
+  position: fixed;
 }
 
+.logo-image {
+  position: relative;
+  z-index: 100;
+  height: 50px;
+}
+
+nav { 
+  display: flex; 
+  align-items: center;
+  gap: 2em;
+  color: var(--black)
+}
 
 .container{
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 80px auto 0 auto;
 }
 
 .card-wrapper{
@@ -39,7 +67,7 @@ header{
 
 .card{
   width: 22%;
-  border: 1px solid #FFDB15;
+  border: 1px solid var(--yellow);
   height: fit-content;
 }
 
@@ -57,6 +85,7 @@ header{
   display: flex;
   justify-content: space-between;
   padding: 0 5px;
+  background-color: var(--black);
 }
 
 .card__title{
@@ -72,16 +101,20 @@ header{
 
 .card__button{
   border:none;
-  background-color: #b5a197;
+  background-color: var(--grey);
   padding: 12px 5px;
   color:#fff;
   font-size: 17px;
   font-weight: 300;
-  border-top: 1px solid #FFDB15;
+  border-top: 1px solid var(--yellow);
   cursor: pointer;
 }
 .likes-icon{
   cursor: pointer;
 }
 
-
+footer {
+  background-color: var(--grey);
+  text-align: center;
+  font-weight: ;
+}

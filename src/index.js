@@ -1,16 +1,24 @@
-// Hello  Vanessa, I am  commenting this out for now since I could not use the webpack. After we set up webpack properly we can uncomment them. For now it's just to test that my code is working. We'll talk on slack.
-// import '@fortawesome/fontawesome-free/js/fontawesome';
-// import '@fortawesome/fontawesome-free/js/solid';
-// import '@fortawesome/fontawesome-free/js/regular';
-// import '@fortawesome/fontawesome-free/js/brands';
-// import './style.css';
-
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
+import logo from './imgs/logo.png'
+import './style.css';
 
 const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
 const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
-let shows = [];
 const involvementAppId = "Wj01840XphoYLqWu02p9"
 const cardWrapper = document.querySelector('.card-wrapper');
+const logoContainer = document.querySelector('.logo');
+
+let shows = [];
+
+const headerlogo = () => {
+  const myLogo = new Image ();
+  myLogo.src = logo;
+  myLogo.classList.add("logo-image");
+  logoContainer.appendChild(myLogo);
+}
 
 const displayShowsOnDOM = () => {
   if (!shows.length)
@@ -30,7 +38,6 @@ const displayShowsOnDOM = () => {
             </div>
             <div class="card__footer">
               <button class="card__button">Comment</button>
-              <button class="card__button">Reservation</button>
             </div>
           </div>`;
     cardWrapper.innerHTML += cardTemplate;
@@ -53,6 +60,7 @@ const fetchShows = async () => {
 fetchShows();
 
 
+// Event Listeners
 document.addEventListener("click", async(event) => {
   const id = event.target.id;
   const likesEndPoint = `/apps/${involvementAppId}/likes/`;
@@ -71,4 +79,6 @@ document.addEventListener("click", async(event) => {
   }
 })
 
-
+document.addEventListener('DOMContentLoaded', () => {
+  headerlogo();
+})
