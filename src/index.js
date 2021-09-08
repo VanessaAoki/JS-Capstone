@@ -8,6 +8,9 @@ import './style.css';
 const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
 const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
+const postCommentEndPoint = `/apps/${involvementAppId}/comments/`;
+const getCommentEndPoint = `/apps/${involvementAppId}/comments?item_id=`;
+const commentEndPoint = `/apps/${involvementAppId}/comments/`;
 const cardWrapper = document.querySelector('.card-wrapper');
 const logoContainer = document.querySelector('.logo');
 const modalContainer = document.getElementById('serie__display');
@@ -18,11 +21,6 @@ const headerlogo = () => {
   const myLogo = new Image();
   myLogo.src = logo;
   myLogo.classList.add('logo-image');
-  const modal = document.createElement('a')
-  modal.innerText = 'modal container';
-  modal.setAttribute('href', `#`);
-  logoContainer.append(myLogo, modal);
-  modal.addEventListener('click', displaySerie);
 };
 
 const displaySerie = () => {
@@ -65,24 +63,24 @@ const displaySerie = () => {
 };
 
 const displayShowsOnDOM = () => {
-  if (!shows.length) cardWrapper.innerHTML = '<P>There are no shows to display';
+  if (!shows.length) cardWrapper.innerHTML = '<p>There are no shows to display</p>';
 
   shows.forEach((show) => {
     const cardTemplate = `
-          <div class="card">
-            <img
-              src=${show.show.image.original}
-              alt="${show.show.name}"
-              class="card__image"
-            />
-            <div class="card__body">
-              <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-              <span class="card__icon">31 <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
-            </div>
-            <div class="card__footer">
-              <button class="card__button">Comment</button>
-            </div>
-          </div>`;
+      <div class="card">
+        <img
+          src=${show.show.image.original}
+          alt="${show.show.name}"
+          class="card__image"
+        />
+        <div class="card__body">
+          <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
+          <span class="card__icon">31 <span id="show${show.show.id}" class="likes-icon"> 🤍</span> </span>
+        </div>
+        <div class="card__footer">
+          <button class="card__button ${show.show.id}">Comment</button>
+        </div>
+      </div>`;
     cardWrapper.innerHTML += cardTemplate;
   });
 };
@@ -99,6 +97,28 @@ const fetchShows = async () => {
   }
 };
 
+const postComments = async () => {
+  
+  // const modal = document.createElement('a');
+  // modal.innerText = 'modal container';
+  // modal.setAttribute('href', `#`);
+  // logoContainer.append(myLogo, modal);
+  // modal.addEventListener('click', displaySerie);
+  try {
+    const response = await fetch(tvMazeAPIUrl);
+    const data = await response.json();
+
+    const commentButton = document.querySelector('.card__button');
+    commentButton.addEventListener('click', (event) => {
+      console.log(event.target.classList[1])
+    });
+    
+    console.log('data');
+  } catch (ex) {
+    console.log('Error from server', ex);
+  }
+}
+
 const modalDisplayNone = () => {
   modalContainer.style.display = "none";
 };
@@ -107,4 +127,5 @@ const modalDisplayNone = () => {
 document.addEventListener('DOMContentLoaded', () => {
   fetchShows();
   headerlogo();
+  postComments();
 });
