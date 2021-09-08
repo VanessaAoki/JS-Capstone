@@ -10,6 +10,7 @@ const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.ne
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const cardWrapper = document.querySelector('.card-wrapper');
 const logoContainer = document.querySelector('.logo');
+const modalContainer = document.getElementById('serie__display');
 
 let shows = [];
 
@@ -17,18 +18,61 @@ const headerlogo = () => {
   const myLogo = new Image();
   myLogo.src = logo;
   myLogo.classList.add('logo-image');
-  logoContainer.appendChild(myLogo);
+  const modal = document.createElement('a')
+  modal.innerText = 'modal container';
+  modal.setAttribute('href', `#`);
+  logoContainer.append(myLogo, modal);
+  modal.addEventListener('click', displaySerie);
+};
+
+const displaySerie = () => {
+  modalContainer.style.display = "block";
+  modalContainer.innerHTML = `
+    <div class="modal-content">
+      <a class="modal-close
+      ">&times;</a>
+      <div class="serie-infos">
+        <h2 class="show-title">Show Title</h2>
+        <p class="show-genre">Genre: </p>
+        <p class="show-premier">Release date: </p>
+        <p class="show-status">Status: </p>
+        <p class="show-language">Language: </p>
+        <div class="show-summary">This is a show about something</div>
+      </div>
+      <div class="modal-comments">
+        <h3>Comments</h3>
+        <ul class="comments-container"></ul>
+      </div>
+      <div class="modal-add-comment">
+        <h3>Add a comment</h3>
+        <form class="comment-form">
+          <input type="text" name="comment-author" id="comment-author">
+          <input type="text" name="comment-text" id="comment-text">
+          <input type="submit" value="Comment">
+        </form>
+      </div>
+    </div>
+  `;
+  const modalClose = document.querySelector('.modal-close');
+  modalClose.addEventListener('click', () => {
+    modalDisplayNone();
+  });
+  window.addEventListener('click', (event) => {
+    if (event.target == modalContainer) {
+      modalDisplayNone();
+    }
+  });
 };
 
 const displayShowsOnDOM = () => {
-  if (!shows.length) cardWrapper.innerHTML = '<P>There are no movie shows to display';
+  if (!shows.length) cardWrapper.innerHTML = '<P>There are no shows to display';
 
   shows.forEach((show) => {
     const cardTemplate = `
           <div class="card">
             <img
               src=${show.show.image.original}
-              alt=""
+              alt="${show.show.name}"
               class="card__image"
             />
             <div class="card__body">
@@ -55,27 +99,12 @@ const fetchShows = async () => {
   }
 };
 
-fetchShows();
+const modalDisplayNone = () => {
+  modalContainer.style.display = "none";
+};
 
 // Event Listeners
-document.addEventListener('click', async (event) => {
-  const { id } = event.target;
-  const likesEndPoint = `/apps/${involvementAppId}/likes/`;
-  const data = { item_id: id };
-  console.log(involvementAPIUrl + likesEndPoint);
-  console.log(JSON.stringify(data));
-  if (id && id.includes('show')) {
-    const response = await fetch(involvementAPIUrl + likesEndPoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    console.log(response);
-  }
-});
-
 document.addEventListener('DOMContentLoaded', () => {
+  fetchShows();
   headerlogo();
 });

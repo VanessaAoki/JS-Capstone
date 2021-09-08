@@ -5,8 +5,6 @@
   --grey: #292929;
   --white: #f3f5f9;
   --yellow: #ffdb15;
-
-  /* font-family: 'Poppins', sans-serif; */
 }
 
 *,
@@ -29,6 +27,11 @@ body {
   background-size: cover;
 }
 
+h1,
+h2,
+h3,
+h4 { font-family: 'Poppins', sans-serif; }
+
 header {
   padding: 0 300px 0 50px;
   height: 50px;
@@ -42,7 +45,7 @@ header {
 
 .logo-image {
   position: relative;
-  z-index: 100;
+  z-index: 1;
   height: 50px;
 }
 
@@ -51,6 +54,69 @@ nav {
   align-items: center;
   gap: 2em;
   color: var(--black);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.300);
+}
+
+.modal-content {
+  background-color: var(--white);
+  color: #020301;
+  margin: 15% auto;
+  padding: 2em;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.modal-close {
+  color: var(--yellow);
+  float: right;
+  font-size: 4em;
+  font-weight: 700;
+  line-height: 10px;
+}
+
+.show-title { 
+  grid-area: title; 
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+.show-genre { grid-area: genre; }
+
+.show-premier { grid-area: premier; }
+
+.show-status { grid-area: status; }
+
+.show-language { grid-area: language; }
+
+.show-summary { grid-area: summary; }
+
+.serie-infos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "title title"
+    "genre premier"
+    "status language"
+    "summary summary";
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
 }
 
 .container {
