@@ -5,16 +5,16 @@
 // import '@fortawesome/fontawesome-free/js/brands';
 // import './style.css';
 
-
 const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
 const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
 let shows = [];
 const involvementAppId = "Wj01840XphoYLqWu02p9"
+const likeEndPoint = `/apps/${involvementAppId}/likes/`;
 const cardWrapper = document.querySelector('.card-wrapper');
 
 const displayShowsOnDOM = () => {
-  if (!shows.length)
-    return cardWrapper.innerHTML = `<P>There are no movie shows to display`;
+  // if (!shows.length)
+  //   return cardWrapper.innerHTML = `<P>There are no movie shows to display`;
   
   shows.forEach((show) => {
     const cardTemplate = `
@@ -26,7 +26,7 @@ const displayShowsOnDOM = () => {
             />
             <div class="card__body">
               <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-              <span class="card__icon">31 <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
+              <span class="card__icon"><span id="likes${show.show.id}">0</span> <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
             </div>
             <div class="card__footer">
               <button class="card__button">Comment</button>
@@ -42,6 +42,8 @@ const fetchShows = async () => {
 
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
+    const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
+    const likes = await likesResponse.json();
     shows = data;
     displayShowsOnDOM();
     console.log(shows);
@@ -49,18 +51,15 @@ const fetchShows = async () => {
     console.log('Error from server', ex);
   }
 }
-
 fetchShows();
 
+displayShowsOnDOM();
 
 document.addEventListener("click", async(event) => {
   const id = event.target.id;
-  const likesEndPoint = `/apps/${involvementAppId}/likes/`;
   const data = { item_id: id }
-  console.log(involvementAPIUrl + likesEndPoint)
-  console.log(JSON.stringify(data))
   if (id && id.includes("show")) {
-    const response = await fetch(involvementAPIUrl + likesEndPoint, {
+    const response = await fetch(involvementAPIUrl + likeEndPoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -69,6 +68,21 @@ document.addEventListener("click", async(event) => {
     });
     console.log(response)
   }
+
+fetch(involvementAPIUrl + likeEndPoint)
+.then((response) => response.json())
+.then((data) => {
+  console.log(data);
+  const tvShow = shows.find(
+    (show) => show.show.id === parseInt(id.slice(4))
+  );
+  const like = data.find((item) => item.item_id === id);
+  tvShow.show.likes = like.likes;
+  console.log(tvShow);
+  document.querySelector(`#likes${id.slice(4)}`).innerHTML =
+    tvShow.show.likes;
+});
+
 })
 
 
