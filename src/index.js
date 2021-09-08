@@ -37,6 +37,8 @@ const displayShowsOnDOM = () => {
   });
 }
 
+// Use another function to call each one of the show likes
+
 const fetchShows = async () => {
   try {
 
@@ -84,5 +86,7 @@ fetch(involvementAPIUrl + likeEndPoint)
 });
 
 })
+
+
 
 
