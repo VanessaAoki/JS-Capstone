@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import logo from './imgs/logo.png';
+import { commentsCounter } from './commentsCounter';
 import './style.css';
 
 const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
@@ -153,18 +154,18 @@ const getComments = (id) => {
   .then((response) => response.json())
   .then((json) => {
     const commentSection = document.getElementById('comments-section');
-    const commentCounter = document.getElementById('comments-counter');
-    let counter = json.length;
+    let fullCounter = json.length;
+    let minusCounter = 0;
     json.forEach((comment) => {
       if (comment.username == '' || comment.comment == '') {
-        counter--;
+        minusCounter++;
       } else {
         const liComment = document.createElement('li');
         liComment.innerHTML = `<p>${comment.creation_date} <b>${comment.username}</b>: ${comment.comment}</p>`;
         commentSection.appendChild(liComment);
       }
     });
-    commentCounter.innerText = `(${counter})`;
+    commentsCounter(fullCounter, minusCounter);
   });
 }
 
