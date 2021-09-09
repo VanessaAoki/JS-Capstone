@@ -54,6 +54,9 @@ $ cd dist
 
 3. Open the `index.html` file and run the application;
 
+### Live Server
+Optionally, you can run the application [here](https://raw.githack.com/VanessaAoki/JS-Capstone/development/dist/index.html).
+
 ## Author
 
 👤 Chibuike Uzoechina
