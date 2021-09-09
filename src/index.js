@@ -1,14 +1,18 @@
+/* eslint-disable max-len */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import './style.css';
-import counters from './counters';
+import { counters } from './counters';
 
-const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
-const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
+const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
+const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
 let shows = [];
-const involvementAppId = "Wj01840XphoYLqWu02p9"
+const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const likeEndPoint = `/apps/${involvementAppId}/likes/`;
 const cardWrapper = document.querySelector('.card-wrapper');
 
@@ -41,25 +45,19 @@ const displayShowsOnDOM = () => {
 
 const fetchShows = async () => {
   try {
-
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
     const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
     const likes = await likesResponse.json();
-    console.log(likes)
     shows = data;
-    let counter = document.querySelector('.counter')
+    const counter = document.querySelector('.counter');
     counter.innerHTML = counters(shows);
 
     const likeHashMap = {};
     for (let i = 0; i < likes.length; i++) {
-      likeHashMap[parseInt(likes[i].item_id.slice(4))] = likes[i].likes;
+      likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
     }
-    console.log(likeHashMap);
-    shows = data.map((item) =>
-      item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }
-    );
-    console.log(shows);
+    shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
     displayShowsOnDOM();
   } catch (ex) {
     console.log('Error from server', ex);
@@ -69,37 +67,28 @@ fetchShows();
 
 displayShowsOnDOM();
 
-document.addEventListener("click", async(event) => {
-  const id = event.target.id;
-  const data = { item_id: id }
-  if (id && id.includes("show")) {
+document.addEventListener('click', async (event) => {
+  const { id } = event.target;
+  const data = { item_id: id };
+  if (id && id.includes('show')) {
     const response = await fetch(involvementAPIUrl + likeEndPoint, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-    console.log(response)
   }
 
-fetch(involvementAPIUrl + likeEndPoint)
-.then((response) => response.json())
-.then((data) => {
-  // console.log(data);
-  const tvShow = shows.find(
-    (show) => show.show.id === parseInt(id.slice(4))
-  );
-  const like = data.find((item) => item.item_id === id);
-  tvShow.likes = like.likes;
-  console.log(tvShow);
-  document.querySelector(`#likes${id.slice(4)}`).innerHTML =
-    tvShow.likes;
+  fetch(involvementAPIUrl + likeEndPoint)
+    .then((response) => response.json())
+    .then((data) => {
+      // console.log(data);
+      const tvShow = shows.find(
+        (show) => show.show.id === parseInt(id.slice(4), 10),
+      );
+      const like = data.find((item) => item.item_id === id);
+      tvShow.likes = like.likes;
+      document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
+    });
 });
-
-})
-
-
-
-
-
