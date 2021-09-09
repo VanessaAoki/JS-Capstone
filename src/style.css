@@ -88,7 +88,8 @@ nav {
 
 .show-image { 
   grid-area: image; 
-  width: 60%;
+  width: auto;
+  height: 50vh;
   margin: 0 auto;
 }
 
@@ -132,12 +133,19 @@ nav {
   margin: 1em auto;
 }
 
+.comments-container { list-style: none; }
 .comment-form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5em;
   padding-top: 1em;
+}
+.comments-section-title { 
+  display: flex; 
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
 }
 
 .comment-form > input {

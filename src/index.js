@@ -44,8 +44,10 @@ const displaySerie = (show) => {
         <div class="show-summary">${show.summary}</div>
       </div>
       <div class="modal-comments">
-        <h3>Comments</h3>
-        <ul class="comments-container"></ul>
+        <div class="comments-section-title">
+          <h3>Comments</h3><span id="comments-counter"></span>
+        </div>
+        <ul class="comments-container" id="comments-section"></ul>
       </div>
       <div class="modal-add-comment">
         <h3>Add a comment</h3>
@@ -75,9 +77,7 @@ const displaySerie = (show) => {
 };
 
 const displayShowsOnDOM = () => {
-  if (!shows.length) cardWrapper.innerHTML = '<p>There are no shows to display</p>';
-
-  shows.forEach((show) => {
+    shows.forEach((show) => {
     const cardTemplate = `
       <div class="card">
         <img
@@ -119,8 +119,8 @@ const getShowData = async () => {
         const id = event.target.classList[1];
         const res = await fetch(idURL + id);
         const show = await res.json();
-        displaySerie(show);
         getComments(id);
+        displaySerie(show);
       });
     })
   } catch (ex) {
@@ -128,10 +128,9 @@ const getShowData = async () => {
   }
 }
 
-const postComment = (id) => {
+const postComment = (id, event) => {
   const inputName = document.getElementById('comment-author');
   const inputComment = document.getElementById('comment-text');
-  console.log(inputName, inputComment, id);
   return fetch(involvementAPIUrl+postCommentEndPoint, {
     method: 'POST',
     body: JSON.stringify({
@@ -143,7 +142,7 @@ const postComment = (id) => {
       'Content-type': 'application/json; charset=UTF-8',
     },
   })
-    .then((response) => response.json())
+    // .then((response) => console.log(response))
     .then(() => {
       window.location.reload();
     });
@@ -152,7 +151,21 @@ const postComment = (id) => {
 const getComments = (id) => {
   fetch(involvementAPIUrl+getCommentEndPoint+id)
   .then((response) => response.json())
-  .then((json) => json.result);
+  .then((json) => {
+    const commentSection = document.getElementById('comments-section');
+    const commentCounter = document.getElementById('comments-counter');
+    let counter = json.length;
+    json.forEach((comment) => {
+      if (comment.username == '' || comment.comment == '') {
+        counter--;
+      } else {
+        const liComment = document.createElement('li');
+        liComment.innerHTML = `<p>${comment.creation_date} <b>${comment.username}</b>: ${comment.comment}</p>`;
+        commentSection.appendChild(liComment);
+      }
+    });
+    commentCounter.innerText = `(${counter})`;
+  });
 }
 
 const modalDisplayNone = () => {
