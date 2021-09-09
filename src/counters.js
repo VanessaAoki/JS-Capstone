@@ -1,5 +1,5 @@
 function counters(shows) {
-  return `There are ${shows.length} movies that rates highest in August 2020`
+  return `Here are ${shows.length} movies with highest ratings in August 2021`
 }
 
 export default counters
