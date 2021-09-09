@@ -1,9 +1,9 @@
-// Hello  Vanessa, I am  commenting this out for now since I could not use the webpack. After we set up webpack properly we can uncomment them. For now it's just to test that my code is working. We'll talk on slack.
-// import '@fortawesome/fontawesome-free/js/fontawesome';
-// import '@fortawesome/fontawesome-free/js/solid';
-// import '@fortawesome/fontawesome-free/js/regular';
-// import '@fortawesome/fontawesome-free/js/brands';
-// import './style.css';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
+import './style.css';
+import counters from './counters';
 
 const tvMazeAPIUrl = "https://api.tvmaze.com/search/shows?q=boys"
 const involvementAPIUrl = "https://us-central1-involvement-api.cloudfunctions.net/capstoneApi"
@@ -15,7 +15,7 @@ const cardWrapper = document.querySelector('.card-wrapper');
 const displayShowsOnDOM = () => {
   // if (!shows.length)
   //   return cardWrapper.innerHTML = `<P>There are no movie shows to display`;
-  
+
   shows.forEach((show) => {
     const cardTemplate = `
           <div class="card">
@@ -48,6 +48,9 @@ const fetchShows = async () => {
     const likes = await likesResponse.json();
     console.log(likes)
     shows = data;
+    let counter = document.querySelector('.counter')
+    counter.innerHTML = counters(shows);
+
     const likeHashMap = {};
     for (let i = 0; i < likes.length; i++) {
       likeHashMap[parseInt(likes[i].item_id.slice(4))] = likes[i].likes;
@@ -95,6 +98,7 @@ fetch(involvementAPIUrl + likeEndPoint)
 });
 
 })
+
 
 
 
