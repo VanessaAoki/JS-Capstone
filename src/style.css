@@ -50,7 +50,7 @@ header {
   height: 50px;
 }
 
-header > p { 
+header > p {
   color: var(--black);
   font-family: 'Pacifico', cursive;
   font-size: 30px;
@@ -179,7 +179,6 @@ nav {
 
 .container,
 main {
-  margin-top: 80px;
   max-width: 1200px;
   margin: 80px auto 0 auto;
 }
@@ -193,9 +192,6 @@ main {
   width: 22%;
   border: 1px solid var(--yellow);
   height: auto;
-}
-
-.card:not(:last-child) {
   margin-right: 36px;
   margin-bottom: 30px;
 }
