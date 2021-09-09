@@ -109,11 +109,12 @@ nav {
 .show-summary { 
   grid-area: summary;
   padding: 1em 0;
+  text-align: justify;
 }
 
 .serie-infos {
   padding: 0 2em;
-  margin: 0 auto;
+  margin: 0 auto 0 30px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;

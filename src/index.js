@@ -29,8 +29,8 @@ const displaySerie = (show) => {
   modalContainer.style.display = "block";
   modalContainer.innerHTML = `
     <div class="modal-content">
-      <a class="modal-close
-      ">&times;</a>
+      <span class="modal-close
+      ">&times;</span>
       <div class="serie-infos">
         <img
           src=${show.image.original}
