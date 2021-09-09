@@ -95,7 +95,7 @@ const displayShowsOnDOM = () => {
         />
         <div class="card__body">
           <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-          <span class="card__icon">31 <span id="show${show.show.id}" class="likes-icon"> 🤍</span> </span>
+          <span class="card__icon"><span id="likes${show.show.id}">${show.likes}</span> <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
         </div>
         <div class="card__footer">
           <button class="card__button ${show.show.id}">Comment</button>
@@ -105,13 +105,29 @@ const displayShowsOnDOM = () => {
   });
 };
 
+// const getLikes = async (shows) => {
+//   const likeHashMap = {};
+//     for (let i = 0; i < likes.length; i++) {
+//       likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
+//     }
+//     shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
+// }
+
 const fetchShows = async () => {
   try {
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
+    const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
+    const likes = await likesResponse.json();
     shows = data;
     const counter = document.querySelector('.counter');
     counter.innerHTML = counters(shows);
+
+    const likeHashMap = {};
+    for (let i = 0; i < likes.length; i++) {
+      likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
+    }
+    shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
     displayShowsOnDOM();
   } catch (ex) {
     console.log('Error from server', ex);
@@ -143,23 +159,17 @@ document.addEventListener('click', async (event) => {
     });
 });
 
-const getShowData = async () => {
-  try {
-    const response = await fetch(tvMazeAPIUrl);
-    const data = await response.json();
-    const commentButtons = document.getElementsByClassName('card__button');
-    Array.from(commentButtons).forEach((commentButton) => {
-      commentButton.addEventListener('click', async (event) => {
-        const id = event.target.classList[1];
-        const res = await fetch(idURL + id);
-        const show = await res.json();
-        getComments(id);
-        displaySerie(show);
-      });
+const getShowData = () => {
+  const commentButtons = document.getElementsByClassName('card__button');
+  Array.from(commentButtons).forEach((commentButton) => {
+    commentButton.addEventListener('click', async (event) => {
+      const id = event.target.classList[1];
+      const res = await fetch(idURL + id);
+      const show = await res.json();
+      getComments(id);
+      displaySerie(show);
     });
-  } catch (ex) {
-    console.log('Error from server', ex);
-  }
+  });
 };
 
 const postComment = (id) => {
