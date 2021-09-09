@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 :root {
   --black: #020301;
@@ -38,7 +39,7 @@ header {
   width: 100%;
   top: 0;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   background-color: var(--yellow);
   position: fixed;
 }
@@ -49,14 +50,19 @@ header {
   height: 50px;
 }
 
+header > p { 
+  color: var(--black);
+  font-family: 'Pacifico', cursive;
+  font-size: 30px;
+  margin-left: 0.4em;
+}
+
 nav {
   display: flex;
   align-items: center;
   gap: 2em;
   color: var(--black);
 }
-
-main { margin-top: 80px; }
 
 .modal {
   display: none;
@@ -171,7 +177,9 @@ main { margin-top: 80px; }
   background-color: var(--yellow);
 }
 
-.container {
+.container,
+main {
+  margin-top: 80px;
   max-width: 1200px;
   margin: 80px auto 0 auto;
 }
@@ -238,4 +246,10 @@ main { margin-top: 80px; }
 footer {
   background-color: var(--grey);
   text-align: center;
+  padding: 0.5em 0;
+}
+
+.our-links {
+  text-decoration: none;
+  color: var(--yellow);
 }

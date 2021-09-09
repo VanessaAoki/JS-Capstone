@@ -8,6 +8,7 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import logo from './imgs/logo.png';
+import { counters } from './counters';
 import { commentsCounter } from './commentsCounter';
 import './style.css';
 
@@ -109,6 +110,8 @@ const fetchShows = async () => {
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
     shows = data;
+    const counter = document.querySelector('.counter');
+    counter.innerHTML = counters(shows);
     displayShowsOnDOM();
   } catch (ex) {
     console.log('Error from server', ex);
