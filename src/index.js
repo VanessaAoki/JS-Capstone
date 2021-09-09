@@ -6,6 +6,7 @@ import logo from './imgs/logo.png';
 import './style.css';
 
 const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
+const idURL = 'https://api.tvmaze.com/shows/'
 const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const postCommentEndPoint = `/apps/${involvementAppId}/comments/`;
@@ -21,21 +22,27 @@ const headerlogo = () => {
   const myLogo = new Image();
   myLogo.src = logo;
   myLogo.classList.add('logo-image');
+  logoContainer.appendChild(myLogo);
 };
 
-const displaySerie = () => {
+const displaySerie = (show) => {
   modalContainer.style.display = "block";
   modalContainer.innerHTML = `
     <div class="modal-content">
       <a class="modal-close
       ">&times;</a>
       <div class="serie-infos">
-        <h2 class="show-title">Show Title</h2>
-        <p class="show-genre">Genre: </p>
-        <p class="show-premier">Release date: </p>
-        <p class="show-status">Status: </p>
-        <p class="show-language">Language: </p>
-        <div class="show-summary">This is a show about something</div>
+        <img
+          src=${show.image.original}
+          alt="${show.name}"
+          class="show-image"
+        />
+        <h2 class="show-title">${show.name}</h2>
+        <p class="show-genre">Genre: ${show.genres}</p>
+        <p class="show-premier">Release date: ${show.premiered}</p>
+        <p class="show-status">Status: ${show.status}</p>
+        <p class="show-language">Language: ${show.language}</p>
+        <div class="show-summary">${show.summary}</div>
       </div>
       <div class="modal-comments">
         <h3>Comments</h3>
@@ -97,23 +104,20 @@ const fetchShows = async () => {
   }
 };
 
-const postComments = async () => {
-  
-  // const modal = document.createElement('a');
-  // modal.innerText = 'modal container';
-  // modal.setAttribute('href', `#`);
-  // logoContainer.append(myLogo, modal);
-  // modal.addEventListener('click', displaySerie);
+const getShowData = async () => {
   try {
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
-
-    const commentButton = document.querySelector('.card__button');
-    commentButton.addEventListener('click', (event) => {
-      console.log(event.target.classList[1])
-    });
-    
-    console.log('data');
+    const commentButtons = document.getElementsByClassName('card__button');
+    Array.from(commentButtons).forEach(function(commentButton) {
+      commentButton.addEventListener('click', async (event) => {
+        const id = event.target.classList[1];
+        const res = await fetch(idURL + id);
+        const show = await res.json();
+        console.log(show.genres)
+        displaySerie(show);
+      });
+    })
   } catch (ex) {
     console.log('Error from server', ex);
   }
@@ -127,5 +131,5 @@ const modalDisplayNone = () => {
 document.addEventListener('DOMContentLoaded', () => {
   fetchShows();
   headerlogo();
-  postComments();
+  getShowData();
 });

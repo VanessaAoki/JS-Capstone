@@ -71,7 +71,7 @@ nav {
 .modal-content {
   background-color: var(--white);
   color: #020301;
-  margin: 15% auto;
+  margin: 5% auto;
   padding: 2em;
   border: 1px solid #888;
   width: 80%;
@@ -86,10 +86,16 @@ nav {
   cursor: pointer;
 }
 
+.show-image { 
+  grid-area: image; 
+  width: 60%;
+  margin: 0 auto;
+}
+
 .show-title { 
   grid-area: title; 
   text-align: center;
-  padding-bottom: 1em;
+  padding: 1em 0;
 }
 
 .show-genre { grid-area: genre; }
@@ -107,6 +113,7 @@ nav {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-template-areas: 
+    "image image"
     "title title"
     "genre premier"
     "status language"
