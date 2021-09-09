@@ -26,7 +26,7 @@ const displayShowsOnDOM = () => {
             />
             <div class="card__body">
               <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-              <span class="card__icon"><span id="likes${show.show.id}">0</span> <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
+              <span class="card__icon"><span id="likes${show.show.id}">${show.likes}</span> <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
             </div>
             <div class="card__footer">
               <button class="card__button">Comment</button>
@@ -35,7 +35,7 @@ const displayShowsOnDOM = () => {
           </div>`;
     cardWrapper.innerHTML += cardTemplate;
   });
-}
+};
 
 // Use another function to call each one of the show likes
 
@@ -46,13 +46,22 @@ const fetchShows = async () => {
     const data = await response.json();
     const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
     const likes = await likesResponse.json();
+    console.log(likes)
     shows = data;
-    displayShowsOnDOM();
+    const likeHashMap = {};
+    for (let i = 0; i < likes.length; i++) {
+      likeHashMap[parseInt(likes[i].item_id.slice(4))] = likes[i].likes;
+    }
+    console.log(likeHashMap);
+    shows = data.map((item) =>
+      item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }
+    );
     console.log(shows);
+    displayShowsOnDOM();
   } catch (ex) {
     console.log('Error from server', ex);
   }
-}
+};
 fetchShows();
 
 displayShowsOnDOM();
@@ -74,15 +83,15 @@ document.addEventListener("click", async(event) => {
 fetch(involvementAPIUrl + likeEndPoint)
 .then((response) => response.json())
 .then((data) => {
-  console.log(data);
+  // console.log(data);
   const tvShow = shows.find(
     (show) => show.show.id === parseInt(id.slice(4))
   );
   const like = data.find((item) => item.item_id === id);
-  tvShow.show.likes = like.likes;
+  tvShow.likes = like.likes;
   console.log(tvShow);
   document.querySelector(`#likes${id.slice(4)}`).innerHTML =
-    tvShow.show.likes;
+    tvShow.likes;
 });
 
 })
