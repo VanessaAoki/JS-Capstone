@@ -15,6 +15,7 @@ const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
 const idURL = 'https://api.tvmaze.com/shows/';
 const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
+const likeEndPoint = `/apps/${involvementAppId}/likes/`;
 const postCommentEndPoint = `/apps/${involvementAppId}/comments/`;
 const getCommentEndPoint = `/apps/${involvementAppId}/comments?item_id=`;
 const cardWrapper = document.querySelector('.card-wrapper');
@@ -137,8 +138,8 @@ document.addEventListener('click', async (event) => {
       tvShow.likes = like.likes;
       document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
     });
-  });
-  
+});
+
 const getShowData = async () => {
   try {
     const response = await fetch(tvMazeAPIUrl);
