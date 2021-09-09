@@ -11,7 +11,6 @@ const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.ne
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const postCommentEndPoint = `/apps/${involvementAppId}/comments/`;
 const getCommentEndPoint = `/apps/${involvementAppId}/comments?item_id=`;
-const commentEndPoint = `/apps/${involvementAppId}/comments/`;
 const cardWrapper = document.querySelector('.card-wrapper');
 const logoContainer = document.querySelector('.logo');
 const modalContainer = document.getElementById('serie__display');
@@ -58,9 +57,15 @@ const displaySerie = (show) => {
       </div>
     </div>
   `;
+
   const modalClose = document.querySelector('.modal-close');
   modalClose.addEventListener('click', () => {
     modalDisplayNone();
+  });
+  const postCommentButton = document.getElementById('comment-button');
+  postCommentButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    postComment(show.id);
   });
   window.addEventListener('click', (event) => {
     if (event.target == modalContainer) {
@@ -114,13 +119,40 @@ const getShowData = async () => {
         const id = event.target.classList[1];
         const res = await fetch(idURL + id);
         const show = await res.json();
-        console.log(show.genres)
         displaySerie(show);
+        getComments(id);
       });
     })
   } catch (ex) {
     console.log('Error from server', ex);
   }
+}
+
+const postComment = (id) => {
+  const inputName = document.getElementById('comment-author');
+  const inputComment = document.getElementById('comment-text');
+  console.log(inputName, inputComment, id);
+  return fetch(involvementAPIUrl+postCommentEndPoint, {
+    method: 'POST',
+    body: JSON.stringify({
+      "item_id": `${id}`,
+      "username": `${inputName.value}`,
+      "comment": `${inputComment.value}`
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then((response) => response.json())
+    .then(() => {
+      window.location.reload();
+    });
+};
+
+const getComments = (id) => {
+  fetch(involvementAPIUrl+getCommentEndPoint+id)
+  .then((response) => response.json())
+  .then((json) => json.result);
 }
 
 const modalDisplayNone = () => {
