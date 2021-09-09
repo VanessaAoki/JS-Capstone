@@ -38,10 +38,10 @@ const displaySerie = (show) => {
           class="show-image"
         />
         <h2 class="show-title">${show.name}</h2>
-        <p class="show-genre">Genre: ${show.genres}</p>
-        <p class="show-premier">Release date: ${show.premiered}</p>
-        <p class="show-status">Status: ${show.status}</p>
-        <p class="show-language">Language: ${show.language}</p>
+        <p class="show-genre">Genre:<b> ${show.genres}</b></p>
+        <p class="show-premier">Release date:<b> ${show.premiered}</b></p>
+        <p class="show-status">Status:<b> ${show.status}</b></p>
+        <p class="show-language">Language:<b> ${show.language}</b></p>
         <div class="show-summary">${show.summary}</div>
       </div>
       <div class="modal-comments">
@@ -51,9 +51,9 @@ const displaySerie = (show) => {
       <div class="modal-add-comment">
         <h3>Add a comment</h3>
         <form class="comment-form">
-          <input type="text" name="comment-author" id="comment-author">
-          <input type="text" name="comment-text" id="comment-text">
-          <input type="submit" value="Comment">
+          <input type="text" name="comment-author" id="comment-author" placeholder="Your name">
+          <input type="text" name="comment-text" id="comment-text" placeholder="Your insights">
+          <input type="submit" value="Comment" id="comment-button">
         </form>
       </div>
     </div>

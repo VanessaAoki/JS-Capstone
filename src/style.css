@@ -106,7 +106,10 @@ nav {
 
 .show-language { grid-area: language; }
 
-.show-summary { grid-area: summary; }
+.show-summary { 
+  grid-area: summary;
+  padding: 1em 0;
+}
 
 .serie-infos {
   display: grid;
@@ -115,9 +118,15 @@ nav {
   grid-template-areas: 
     "image image"
     "title title"
-    "genre premier"
-    "status language"
+    "premier status"
+    "language genre"
     "summary summary";
+}
+
+.modal-comments,
+.modal-add-comment {
+  width: 60%;
+  margin: 1em auto;
 }
 
 .comment-form {
@@ -125,6 +134,26 @@ nav {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5em;
+  padding-top: 1em;
+}
+
+.comment-form > input {
+  border: 1px solid var(--black);
+  padding: 0.4em 1em;
+  color: var(--grey);
+  overflow-y: auto;
+  height: 2.5em;
+  width: 70%;
+}
+
+#comment-button {
+  width: 40%;
+  font-size: 16px;
+}
+
+#comment-button:hover {
+  transition: 1.1s;
+  background-color: var(--yellow);
 }
 
 .container {
