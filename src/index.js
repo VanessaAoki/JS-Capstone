@@ -39,7 +39,7 @@ const displaySerie = (show) => {
         />
         <h2 class="show-title">${show.name}</h2>
         <p class="show-genre">Genre:<b> ${show.genres}</b></p>
-        <p class="show-premier">Release date:<b> ${show.premiered}</b></p>
+        <p class="show-premier">Release date:<b> ${show.premiered != null ? show.premiered : 'Not released'}</b></p>
         <p class="show-status">Status:<b> ${show.status}</b></p>
         <p class="show-language">Language:<b> ${show.language}</b></p>
         <div class="show-summary">${show.summary}</div>
