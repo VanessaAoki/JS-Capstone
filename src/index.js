@@ -1,3 +1,7 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
@@ -7,7 +11,7 @@ import { commentsCounter } from './commentsCounter';
 import './style.css';
 
 const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
-const idURL = 'https://api.tvmaze.com/shows/'
+const idURL = 'https://api.tvmaze.com/shows/';
 const involvementAPIUrl = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi';
 const involvementAppId = 'Wj01840XphoYLqWu02p9';
 const postCommentEndPoint = `/apps/${involvementAppId}/comments/`;
@@ -26,7 +30,7 @@ const headerlogo = () => {
 };
 
 const displaySerie = (show) => {
-  modalContainer.style.display = "block";
+  modalContainer.style.display = 'block';
   modalContainer.innerHTML = `
     <div class="modal-content">
       <span class="modal-close
@@ -71,14 +75,14 @@ const displaySerie = (show) => {
     postComment(show.id);
   });
   window.addEventListener('click', (event) => {
-    if (event.target == modalContainer) {
+    if (event.target === modalContainer) {
       modalDisplayNone();
     }
   });
 };
 
 const displayShowsOnDOM = () => {
-    shows.forEach((show) => {
+  shows.forEach((show) => {
     const cardTemplate = `
       <div class="card">
         <img
@@ -104,7 +108,6 @@ const fetchShows = async () => {
     const data = await response.json();
     shows = data;
     displayShowsOnDOM();
-    console.log(shows);
   } catch (ex) {
     console.log('Error from server', ex);
   }
@@ -115,7 +118,7 @@ const getShowData = async () => {
     const response = await fetch(tvMazeAPIUrl);
     const data = await response.json();
     const commentButtons = document.getElementsByClassName('card__button');
-    Array.from(commentButtons).forEach(function(commentButton) {
+    Array.from(commentButtons).forEach((commentButton) => {
       commentButton.addEventListener('click', async (event) => {
         const id = event.target.classList[1];
         const res = await fetch(idURL + id);
@@ -123,21 +126,21 @@ const getShowData = async () => {
         getComments(id);
         displaySerie(show);
       });
-    })
+    });
   } catch (ex) {
     console.log('Error from server', ex);
   }
-}
+};
 
-const postComment = (id, event) => {
+const postComment = (id) => {
   const inputName = document.getElementById('comment-author');
   const inputComment = document.getElementById('comment-text');
-  return fetch(involvementAPIUrl+postCommentEndPoint, {
+  return fetch(involvementAPIUrl + postCommentEndPoint, {
     method: 'POST',
     body: JSON.stringify({
-      "item_id": `${id}`,
-      "username": `${inputName.value}`,
-      "comment": `${inputComment.value}`
+      item_id: `${id}`,
+      username: `${inputName.value}`,
+      comment: `${inputComment.value}`,
     }),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -150,27 +153,27 @@ const postComment = (id, event) => {
 };
 
 const getComments = (id) => {
-  fetch(involvementAPIUrl+getCommentEndPoint+id)
-  .then((response) => response.json())
-  .then((json) => {
-    const commentSection = document.getElementById('comments-section');
-    let fullCounter = json.length;
-    let minusCounter = 0;
-    json.forEach((comment) => {
-      if (comment.username == '' || comment.comment == '') {
-        minusCounter++;
-      } else {
-        const liComment = document.createElement('li');
-        liComment.innerHTML = `<p>${comment.creation_date} <b>${comment.username}</b>: ${comment.comment}</p>`;
-        commentSection.appendChild(liComment);
-      }
+  fetch(involvementAPIUrl + getCommentEndPoint + id)
+    .then((response) => response.json())
+    .then((json) => {
+      const commentSection = document.getElementById('comments-section');
+      const fullCounter = json.length;
+      let minusCounter = 0;
+      json.forEach((comment) => {
+        if (comment.username === '' || comment.comment === '') {
+          minusCounter++;
+        } else {
+          const liComment = document.createElement('li');
+          liComment.innerHTML = `<p>${comment.creation_date} <b>${comment.username}</b>: ${comment.comment}</p>`;
+          commentSection.appendChild(liComment);
+        }
+      });
+      commentsCounter(fullCounter, minusCounter);
     });
-    commentsCounter(fullCounter, minusCounter);
-  });
-}
+};
 
 const modalDisplayNone = () => {
-  modalContainer.style.display = "none";
+  modalContainer.style.display = 'none';
 };
 
 // Event Listeners
