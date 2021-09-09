@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
@@ -113,6 +114,31 @@ const fetchShows = async () => {
   }
 };
 
+document.addEventListener('click', async (event) => {
+  const { id } = event.target;
+  const data = { item_id: id };
+  if (id && id.includes('show')) {
+    const response = await fetch(involvementAPIUrl + likeEndPoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  }
+
+  fetch(involvementAPIUrl + likeEndPoint)
+    .then((response) => response.json())
+    .then((data) => {
+      const tvShow = shows.find(
+        (show) => show.show.id === parseInt(id.slice(4), 10),
+      );
+      const like = data.find((item) => item.item_id === id);
+      tvShow.likes = like.likes;
+      document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
+    });
+  });
+  
 const getShowData = async () => {
   try {
     const response = await fetch(tvMazeAPIUrl);
