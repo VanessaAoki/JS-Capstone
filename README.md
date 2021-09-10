@@ -18,6 +18,7 @@ TechTV is a website that displays the shows that received the highest ratings fr
 > users are also able to view both the number of comments and likes a show has received from previous viewers. 
 
 <p align="center">
+  <iframe title="vimeo-player" src="https://player.vimeo.com/video/601929408?h=b1917909ba" width="640" height="360" frameborder="0" allowfullscreen></iframe>
     <img alt="Screenshot" src="./src/imgs/screenshot1.png" width="500">
     <br>
     <img alt="Screenshot" src="./src/imgs/screenshot2.png" width="500">
