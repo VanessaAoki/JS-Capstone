@@ -51,11 +51,13 @@ $ cd dist
 ```
 <details align="right">
 <summary><small>What are these commands?</summary>
-- the `$ cd` command is used to move to different folders. <br>
+- the `$ cd` command is used to move to different folders.<br>
 - while `$ npm run build` is used to compile the aplication files.</small>
 </details>
 
 3. Open the `index.html` file and run the application;
+
+4. To run the tests simply type `$ npm test` in your console;
 
 ### Live Server
 Optionally, you can run the application [here](https://raw.githack.com/VanessaAoki/JS-Capstone/development/dist/index.html).
