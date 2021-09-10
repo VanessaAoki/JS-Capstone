@@ -269,6 +269,21 @@ footer {
 
 /* For mobile phones */
 @media only screen and (max-width: 768px) {
+  .card {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .card-wrapper {
+    width: 100%;
+    gap: 0;
+  }
+
+  .counter {
+    display: none;
+  }
+
   .show-image {
     width: 90%;
     height: auto;
@@ -285,6 +300,16 @@ footer {
   }
 }
 
+@media only screen and (max-width: 480px) {
+  .card {
+    min-width: 100%;
+  }
+
+  .card-wrapper {
+    padding: 2.5%;
+    width: 95%;
+  }
+}
 /* For tablets */
 
 /* @media only screen and (min-width: 768px) {
