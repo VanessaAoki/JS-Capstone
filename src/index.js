@@ -94,7 +94,7 @@ const displayShowsOnDOM = () => {
     if (show.show.id === 15299) {
       cardWrapper.innerHTML = '';
     } else {
-      console.log(show)
+      console.log(show);
       const cardTemplate = `
       <div class="card">
         <img

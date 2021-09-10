@@ -63,7 +63,7 @@ nav > h1 {
   padding-left: 0.2em;
 }
 
-.counter { 
+.counter {
   padding-left: 3em;
   font-size: 18px;
 }
@@ -208,7 +208,6 @@ nav > h1 {
 }
 
 .card__body {
-  float: bottom;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -270,7 +269,7 @@ footer {
 
 /* For mobile phones */
 @media only screen and (max-width: 768px) {
-  .show-image { 
+  .show-image {
     width: 90%;
     height: auto;
   }
@@ -284,9 +283,10 @@ footer {
   .modal-add-comment {
     width: 90%;
   }
-
 }
+
 /* For tablets */
-@media only screen and (min-width: 768px) {
 
-}
+/* @media only screen and (min-width: 768px) {
+
+} */
