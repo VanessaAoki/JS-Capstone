@@ -14,7 +14,8 @@
 </p>
 
 # JS-Capstone: TechTV
-TechTV is a website that displays the shows that received highest ratings from viewers every month. It allows viewers to like and add comments to shows they enjoyed; it also enables them view both the number of comments and likes a show has received from previous viewers. 
+TechTV is a website that displays the shows that received the highest ratings from viewers every month, it allows users to like and add comments to shows they enjoyed.
+> users are also able to view both the number of comments and likes a show has received from previous viewers. 
 
 <p align="center">
     <img alt="Screenshot" src="./src/imgs/screenshot1.png" width="500">
