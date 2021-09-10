@@ -129,6 +129,7 @@ const fetchShows = async () => {
     }
     shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
     displayShowsOnDOM();
+    getShowData();
   } catch (ex) {
     console.log('Error from server', ex);
   }
@@ -145,31 +146,39 @@ document.addEventListener('click', async (event) => {
       },
       body: JSON.stringify(data),
     });
+
+
+    fetch(involvementAPIUrl + likeEndPoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const tvShow = shows.find(
+          (show) => show.show.id === parseInt(id.slice(4), 10),
+        );
+        const like = data.find((item) => item.item_id === id);
+        tvShow.likes = like.likes;
+        document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
+      });
   }
 
-  fetch(involvementAPIUrl + likeEndPoint)
-    .then((response) => response.json())
-    .then((data) => {
-      const tvShow = shows.find(
-        (show) => show.show.id === parseInt(id.slice(4), 10),
-      );
-      const like = data.find((item) => item.item_id === id);
-      tvShow.likes = like.likes;
-      document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
-    });
 });
 
 const getShowData = () => {
   const commentButtons = document.getElementsByClassName('card__button');
-  Array.from(commentButtons).forEach((commentButton) => {
-    commentButton.addEventListener('click', async (event) => {
-      const id = event.target.classList[1];
-      const res = await fetch(idURL + id);
-      const show = await res.json();
-      getComments(id);
-      displaySerie(show);
+    
+    Array.from(commentButtons).forEach((commentButton) => {
+      console.log(commentButton)
+      commentButton.addEventListener('click', async (event) => {
+        console.log("button clicked")
+        const id = event.target.classList[1];
+        console.log(id)
+        const res = await fetch(idURL + id);
+        console.log(res)
+        const show = await res.json();
+        console.log(show)
+        getComments(id);
+        displaySerie(show);
+      });
     });
-  });
 };
 
 const postComment = (id) => {
@@ -220,5 +229,4 @@ const modalDisplayNone = () => {
 document.addEventListener('DOMContentLoaded', () => {
   fetchShows();
   headerlogo();
-  getShowData();
 });
