@@ -8,8 +8,8 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import logo from './imgs/logo.png';
-import { counters } from './counters';
 import { commentsCounter } from './commentsCounter';
+import { counters } from './counters';
 import './style.css';
 
 const tvMazeAPIUrl = 'https://api.tvmaze.com/search/shows?q=boys';
@@ -31,6 +31,11 @@ const headerlogo = () => {
   myLogo.classList.add('logo-image');
   logoContainer.appendChild(myLogo);
 };
+
+const showsCounter = () => {
+  const counter = document.querySelector('.counter');
+  counter.innerHTML = counters(shows);
+}
 
 const displaySerie = (show) => {
   modalContainer.style.display = 'block';
@@ -86,7 +91,10 @@ const displaySerie = (show) => {
 
 const displayShowsOnDOM = () => {
   shows.forEach((show) => {
-    const cardTemplate = `
+    if (show.show.id === 15299) {
+      cardWrapper.innerHTML = '';
+    } else {
+      const cardTemplate = `
       <div class="card">
         <img
           src=${show.show.image.original}
@@ -102,64 +110,66 @@ const displayShowsOnDOM = () => {
         </div>
       </div>`;
     cardWrapper.innerHTML += cardTemplate;
+    }
+  });
+  showsCounter();
+};
+
+const getAllLikes = async (data) => {
+  const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
+  const likes = await likesResponse.json();
+  const likeHashMap = {};
+  for (let i = 0; i < likes.length; i++) {
+    likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
+  }
+  shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
+  displayShowsOnDOM();
+  postLikes();
+  getShowData();
+};
+
+const postLikes = async () => {
+  const response = await fetch(tvMazeAPIUrl);
+  await response.json();
+  const likesButtons = document.getElementsByClassName('likes-icon');
+  Array.from(likesButtons).forEach((like) => {
+    like.addEventListener('click', async (event) => {
+      const { id } = event.target;
+      const data = { item_id: id };
+      if (id && id.includes('show')) {
+        await fetch(involvementAPIUrl + likeEndPoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+      }
+    
+      fetch(involvementAPIUrl + likeEndPoint)
+        .then((response) => response.json())
+        .then((data) => {
+          const tvShow = shows.find(
+            (show) => show.show.id === parseInt(id.slice(4), 10),
+          );
+          const like = data.find((item) => item.item_id === id);
+          tvShow.likes = like.likes;
+          document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
+        });
+    });
   });
 };
 
-// const getLikes = async (shows) => {
-//   const likeHashMap = {};
-//     for (let i = 0; i < likes.length; i++) {
-//       likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
-//     }
-//     shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
-// }
-
 const fetchShows = async () => {
-  try {
-    const response = await fetch(tvMazeAPIUrl);
-    const data = await response.json();
-    const likesResponse = await fetch(involvementAPIUrl + likeEndPoint);
-    const likes = await likesResponse.json();
-    shows = data;
-    const counter = document.querySelector('.counter');
-    counter.innerHTML = counters(shows);
-
-    const likeHashMap = {};
-    for (let i = 0; i < likes.length; i++) {
-      likeHashMap[parseInt(likes[i].item_id.slice(4), 10)] = likes[i].likes;
-    }
-    shows = data.map((item) => (item.likes ? { ...item } : { ...item, likes: likeHashMap[item.show.id] }));
-    displayShowsOnDOM();
-  } catch (ex) {
-    console.log('Error from server', ex);
-  }
+  const response = await fetch(tvMazeAPIUrl);
+  const data = await response.json();
+  shows = data;
+  getAllLikes(data);
 };
 
-document.addEventListener('click', async (event) => {
-  const { id } = event.target;
-  const data = { item_id: id };
-  if (id && id.includes('show')) {
-    const response = await fetch(involvementAPIUrl + likeEndPoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-  }
-
-  fetch(involvementAPIUrl + likeEndPoint)
-    .then((response) => response.json())
-    .then((data) => {
-      const tvShow = shows.find(
-        (show) => show.show.id === parseInt(id.slice(4), 10),
-      );
-      const like = data.find((item) => item.item_id === id);
-      tvShow.likes = like.likes;
-      document.querySelector(`#likes${id.slice(4)}`).innerHTML = tvShow.likes;
-    });
-});
-
-const getShowData = () => {
+const getShowData = async () => {
+  const response = await fetch(tvMazeAPIUrl);
+  await response.json();
   const commentButtons = document.getElementsByClassName('card__button');
   Array.from(commentButtons).forEach((commentButton) => {
     commentButton.addEventListener('click', async (event) => {
@@ -186,7 +196,6 @@ const postComment = (id) => {
       'Content-type': 'application/json; charset=UTF-8',
     },
   })
-    // .then((response) => console.log(response))
     .then(() => {
       window.location.reload();
     });
@@ -220,5 +229,4 @@ const modalDisplayNone = () => {
 document.addEventListener('DOMContentLoaded', () => {
   fetchShows();
   headerlogo();
-  getShowData();
 });
