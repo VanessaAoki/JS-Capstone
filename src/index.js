@@ -35,7 +35,7 @@ const headerlogo = () => {
 const showsCounter = () => {
   const counter = document.querySelector('.counter');
   counter.innerHTML = counters(shows);
-}
+};
 
 const displaySerie = (show) => {
   modalContainer.style.display = 'block';
@@ -109,7 +109,7 @@ const displayShowsOnDOM = () => {
           <button class="card__button ${show.show.id}">Comment</button>
         </div>
       </div>`;
-    cardWrapper.innerHTML += cardTemplate;
+      cardWrapper.innerHTML += cardTemplate;
     }
   });
   showsCounter();
@@ -145,7 +145,7 @@ const postLikes = async () => {
           body: JSON.stringify(data),
         });
       }
-    
+
       fetch(involvementAPIUrl + likeEndPoint)
         .then((response) => response.json())
         .then((data) => {
