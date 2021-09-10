@@ -94,6 +94,7 @@ const displayShowsOnDOM = () => {
     if (show.show.id === 15299) {
       cardWrapper.innerHTML = '';
     } else {
+      console.log(show)
       const cardTemplate = `
       <div class="card">
         <img
@@ -102,8 +103,8 @@ const displayShowsOnDOM = () => {
           class="card__image"
         />
         <div class="card__body">
-          <h4 class="card__title"><a href=${show.show.url} class="card-URL">${show.show.name} </a> </h4>
-          <span class="card__icon"><span id="likes${show.show.id}">${show.likes}</span> <span id=show${show.show.id} class="likes-icon"> 🤍</span> </span>
+          <h4 class="card__title">${show.show.name}</h4>
+          <div class="card__icon__container"><span id="likes${show.show.id}" class="card__icon">${show.likes}</span><span id=show${show.show.id} class="likes-icon">&#10084;</span> </div>
         </div>
         <div class="card__footer">
           <button class="card__button ${show.show.id}">Comment</button>
